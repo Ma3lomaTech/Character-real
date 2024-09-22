@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Template Creator</title>
+    <style>
+	/* Base theme adjustments from CodePen */
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #ecf0f1; /* Light text color */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #2c3e50; /* Dark background */
+}
+
+h1, h2 {
+    color: #e74c3c; /* Bright red headings */
+    margin-bottom: 15px;
+}
+
+select, input {
+    padding: 10px;
+    border: 1px solid #34495e; /* Darker border */
+    background-color: #34495e; /* Dark background for inputs */
+    color: #ecf0f1; /* Light text */
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 33.33%;
+}
+
+button {
+    background-color: #e74c3c; /* Bright red button */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* Smooth transitions */
+    width: 28.5%;
+    text-overflow: hidden;
+}
+
+button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+}
+
+#characterSummary {
+    background-color: #34495e; /* Darker background */
+    padding: 25px;
+    margin-top: 30px;
+    border-radius: 10px;
+    color: #ecf0f1; /* Light text */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15); /* Shadow for summary box */
+}
+
+#copyButton {
+    background-color: #34495e; /* Bright red button */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* Smooth transitions */
+    width: 28.5%;
+    text-overflow: hidden;
+    margin-top: 10px; /* Add some space above the button */
+}
+
+#copyButton:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+}
+
+#copyButton.checked {
+    background-color: #2ecc71; /* Green color for "checked" state */
+}
+
+#copyButton.checked::after {
+    content: "✓"; /* Add a check mark */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+}
+/* Style for the labels above input fields */
+label {
+    display: inline-block; /* Align labels inline */
+    margin-right: 10px; /* Space between label and element */
+    color: #bdc3c7; /* Lighter label text */
+}
+
+/* Style for the group containers */
+.group-container {
+    border: 1px solid #34495e; /* Darker border */
+    background-color: #2c3e50; /* Dark background */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    color: #ecf0f1; /* Light text */
+}
+
+#summary,#oneLine,#Random {
+    width:auto;
+}
+/* Style for section headlines */
+.section-headline {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #e74c3c; /* Bright red section headline */
+}
+
+/* Style for the form row */
+.form-row {
+    display: flex; /* Use flexbox for row layout */
+    align-items: center; /* Vertical alignment */
+    justify-content: space-between; /* Distribute space evenly */
+    margin-bottom: 15px;
+}
+
+/* Style for the input, select, and button elements */
+.form-row input,
+.form-row select,
+.form-row button {
+    margin-right: 10px; /* Space between elements */
+}
+
+/* Style for the smaller "Add" button */
+.form-row .add-button {
+    padding: 6px 8px;
+    font-size: 12px;
+}
+
+/* Make the input field grow to fill available space */
+.form-row input {
+    flex-grow: 1; /* Allow input to grow */
+    width: 100%; /* Ensure input fills its container */
+}
+    </style>
+</head>
+<body>
+    <h1>Character Template Creator</h1>
+
+    <div class="group-container">
+        <h2>1. Character Description</h2>
+        <div class="section-headline">Name:</div>
+        <select id="name">
+            <option value="">Select Name</option>
+            <option value="John">John</option>
+            <option value="Mary">Mary</option>
+            <option value="David">David</option>
+            <option value="Sarah">Sarah</option>
+            <option value="Michael">Michael</option>
+            <option value="Emily">Emily</option>
+            <option value="Daniel">Daniel</option>
+            <option value="Jessica">Jessica</option>
+            <option value="Matthew">Matthew</option>
+            <option value="Ashley">Ashley</option>
+        </select>
+        <input type="text" id="nameInput" placeholder="Add your own name...">
+        <button onclick="addNameOption()">Add Name</button>
+
+        <div class="section-headline">Age:</div>
+        <select id="age">
+            <option value="">Select Age</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+            <option value="55">55</option>
+            <option value="60">60</option>
+        </select>
+        <input type="text" id="ageInput" placeholder="Add your own age...">
+        <button onclick="addAgeOption()">Add Age</button>
+
+        <div class="section-headline">Gender:</div>
+        <select id="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Non-binary">Non-binary</option>
+            <option value="Other">Other</option>
+        </select>
+        <input type="text" id="genderInput" placeholder="Add your own gender...">
+        <button onclick="addGenderOption()">Add Gender</button>
+    </div>
+
+    <div class="group-container">
+        <h2>2. Appearance</h2>
+        <div class="section-headline">Hair Style:</div>
+        <select id="hairStyle">
+            <option value="">Select Hair Style</option>
+            <option value="Short Hair Buzz Cut">Short Hair Buzz Cut</option>
+            <option value="Short Hair Spiky">Short Hair Spiky</option>
+            <option value="Short Hair Cropped">Short Hair Cropped</option>
+            <option value="Short Hair Crew Cut">Short Hair Crew Cut</option>
+            <option value="Short Hair Wavy">Short Hair Wavy</option>
+            <option value="Medium Hair Shaggy">Medium Hair Shaggy</option>
+            <option value="Medium Hair Layered">Medium Hair Layered</option>
+            <option value="Medium Hair Curly">Medium Hair Curly</option>
+            <option value="Medium Hair Side-Parted">Medium Hair Side-Parted</option>
+            <option value="Medium Hair Tapered">Medium Hair Tapered</option>
+            <option value="Long Hair Shoulder-Length">Long Hair Shoulder-Length</option>
+            <option value="Long Hair Straight">Long Hair Straight</option>
+            <option value="Long Hair Wavy">Long Hair Wavy</option>
+            <option value="Long Hair Braided">Long Hair Braided</option>
+            <option value="Long Hair Tied in a Bun">Long Hair Tied in a Bun</option>
+            <option value="Unique Style Mohawk">Unique Style Mohawk</option>
+            <option value="Unique Style Dreadlocks">Unique Style Dreadlocks</option>
+            <option value="Unique Style Afro">Unique Style Afro</option>
+            <option value="Unique Style Undercut">Unique Style Undercut</option>
+            <option value="Unique Style Slicked Back">Unique Style Slicked Back</option>
+        </select>
+        <input type="text" id="hairStyleInput" placeholder="Add your own hair style...">
+        <button onclick="addHairStyleOption()">Add Hair Style</button>
+
+        <div class="section-headline">Hair Color:</div>
+        <select id="hairColor">
+            <option value="">Select Hair Color</option>
+            <option value="Hair Color Blonde">Hair Color Blonde</option>
+            <option value="Hair Color Black">Hair Color Black</option>
+            <option value="Hair Color Brown">Hair Color Brown</option>
+            <option value="Hair Color Red">Hair Color Red</option>
+            <option value="Hair Color Silver">Hair Color Silver</option>
+            <option value="Hair Color Blue">Hair Color Blue</option>
+            <option value="Hair Color Multicolored">Hair Color Multicolored</option>
+            <option value="Hair Color Highlights">Hair Color Highlights</option>
+            <option value="Hair Color Faded">Hair Color Faded</option>
+        </select>
+        <input type="text" id="hairColorInput" placeholder="Add your own hair color...">
+        <button onclick="addHairColorOption()">Add Hair Color</button>
+
+        <div class="section-headline">Face Shape:</div>
+        <select id="faceShape">
+            <option value="">Select Face Shape</option>
+            <option value="Face Shape Round">Face Shape Round</option>
+            <option value="Face Shape Oval">Face Shape Oval</option>
+            <option value="Face Shape Square">Face Shape Square</option>
+            <option value="Face Shape Heart-shaped">Face Shape Heart-shaped</option>
+            <option value="Face Shape Long">Face Shape Long</option>
+            <option value="Face Shape Chiseled">Face Shape Chiseled</option>
+        </select>
+        <input type="text" id="faceShapeInput" placeholder="Add your own face shape...">
+        <button onclick="addFaceShapeOption()">Add Face Shape</button>
+
+        <div class="section-headline">Skin Tone:</div>
+        <select id="skinTone">
+            <option value="">Select Skin Tone</option>
+            <option value="Skin Tone Light">Skin Tone Light</option>
+            <option value="Skin Tone Tan">Skin Tone Tan</option>
+            <option value="Skin Tone Olive">Skin Tone Olive</option>
+            <option value="Skin Tone Dark">Skin Tone Dark</option>
+            <option value="Skin Tone Freckled">Skin Tone Freckled</option>
+            <option value="Skin Tone Pale">Skin Tone Pale</option>
+        </select>
+        <input type="text" id="skinToneInput" placeholder="Add your own skin tone...">
+        <button onclick="addSkinToneOption()">Add Skin Tone</button>
+
+        <div class="section-headline">Facial Features:</div>
+        <select id="facialFeatures">
+            <option value="">Select Facial Features</option>
+            <option value="Eyes Large">Eyes Large</option>
+            <option value="Eyes Small">Eyes Small</option>
+            <option value="Eyes Almond-shaped">Eyes Almond-shaped</option>
+            <option value="Eyes Sharp">Eyes Sharp</option>
+            <option value="Eyes Soft">Eyes Soft</option>
+            <option value="Eyes Narrow">Eyes Narrow</option>
+            <option value="Nose Button">Nose Button</option>
+            <option value="Nose Aquiline">Nose Aquiline</option>
+            <option value="Nose Roman">Nose Roman</option>
+            <option value="Nose Flat">Nose Flat</option>
+            <option value="Nose Snub">Nose Snub</option>
+            <option value="Nose Pointed">Nose Pointed</option>
+            <option value="Lips Full">Lips Full</option>
+            <option value="Lips Thin">Lips Thin</option>
+            <option value="Lips Average">Lips Average</option>
+            <option value="Lips Smirking">Lips Smirking</option>
+            <option value="Lips Smiling">Lips Smiling</option>
+            <option value="Lips Frowning">Lips Frowning</option>
+            <option value="Chin Pointed">Chin Pointed</option>
+            <option value="Chin Square">Chin Square</option>
+            <option value="Chin Rounded">Chin Rounded</option>
+            <option value="Chin Dimpled">Chin Dimpled</option>
+        </select>
+        <input type="text" id="facialFeaturesInput" placeholder="Add your own facial features...">
+        <button onclick="addFacialFeaturesOption()">Add Facial Features</button>
+
+        <div class="section-headline">Facial Hair:</div>
+        <select id="facialHair">
+            <option value="">Select Facial Hair</option>
+            <option value="Facial Hair Clean-shaven">Facial Hair Clean-shaven</option>
+            <option value="Facial Hair Stubble">Facial Hair Stubble</option>
+            <option value="Facial Hair Light Beard">Facial Hair Light Beard</option>
+            <option value="Facial Hair Full Beard">Facial Hair Full Beard</option>
+            <option value="Facial Hair Mustache">Facial Hair Mustache</option>
+        </select>
+        <input type="text" id="facialHairInput" placeholder="Add your own facial hair...">
+        <button onclick="addFacialHairOption()">Add Facial Hair</button>
+
+        <div class="section-headline">Facial Markings:</div>
+        <select id="facialMarkings">
+            <option value="">Select Facial Markings</option>
+            <option value="Facial Marking Freckles">Facial Marking Freckles</option>
+            <option value="Facial Marking Scars">Facial Marking Scars</option>
+            <option value="Facial Marking Birthmarks">Facial Marking Birthmarks</option>
+            <option value="Facial Marking Beauty Marks">Facial Marking Beauty Marks</option>
+            <option value="Facial Marking Tattoos">Facial Marking Tattoos</option>
+        </select>
+        <input type="text" id="facialMarkingsInput" placeholder="Add your own facial markings...">
+        <button onclick="addFacialMarkingsOption()">Add Facial Markings</button>
+
+        <div class="section-headline">Character Origins:</div>
+        <select id="characterOrigins">
+            <option value="">Select Character Origins</option>
+            <option value="Origin Caucasian">Origin Caucasian</option>
+            <option value="Origin Asian">Origin Asian</option>
+            <option value="Origin Middle Eastern">Origin Middle Eastern</option>
+            <option value="Origin African">Origin African</option>
+            <option value="Origin Latin">Origin Latin</option>
+            <option value="Origin Mixed Race">Origin Mixed Race</option>
+        </select>
+        <input type="text" id="characterOriginsInput" placeholder="Add your own character origins...">
+        <button onclick="addCharacterOriginsOption()">Add Character Origins</button>
+    </div>
+
+    <div class="group-container">
+        <h2>3. Clothing</h2>
+        <div class="section-headline">Top Attire:</div>
+        <select id="topAttire">
+            <option value="">Select Top Attire</option>
+            <option value="Casual Wear T-shirt">Casual Wear T-shirt</option>
+            <option value="Casual Wear Hoodie">Casual Wear Hoodie</option>
+            <option value="Casual Wear Sweatshirt">Casual Wear Sweatshirt</option>
+            <option value="Casual Wear Button-Up Shirt">Casual Wear Button-Up Shirt</option>
+            <option value="Casual Wear Polo Shirt">Casual Wear Polo Shirt</option>
+            <option value="Casual Wear Tank Top">Casual Wear Tank Top</option>
+            <option value="Formal Wear Blazer">Formal Wear Blazer</option>
+            <option value="Formal Wear Suit Jacket">Formal Wear Suit Jacket</option>
+            <option value="Formal Wear Dress Shirt">Formal Wear Dress Shirt</option>
+            <option value="Formal Wear Vest">Formal Wear Vest</option>
+            <option value="Formal Wear Tuxedo">Formal Wear Tuxedo</option>
+            <option value="Outerwear Jacket (Leather, Bomber, Denim)">Outerwear Jacket (Leather, Bomber, Denim)</option>
+            <option value="Outerwear Coat">Outerwear Coat</option>
+            <option value="Outerwear Trench Coat">Outerwear Trench Coat</option>
+            <option value="Outerwear Windbreaker">Outerwear Windbreaker</option>
+            <option value="Outerwear Parka">Outerwear Parka</option>
+            <option value="Adventure Gear Robe">Adventure Gear Robe</option>
+            <option value="Adventure Gear Armor">Adventure Gear Armor</option>
+            <option value="Adventure Gear Tunic">Adventure Gear Tunic</option>
+            <option value="Adventure Gear Cloak">Adventure Gear Cloak</option>
+            <option value="Adventure Gear Cape">Adventure Gear Cape</option>
+            <option value="Adventure Gear Adventurer’s Vest">Adventure Gear Adventurer’s Vest</option>
+            <option value="Adventure Gear Knight’s Plate Armor">Adventure Gear Knight’s Plate Armor</option>
+            <option value="Sci-fi Gear Futuristic Bodysuit">Sci-fi Gear Futuristic Bodysuit</option>
+            <option value="Sci-fi Gear High-tech Armor">Sci-fi Gear High-tech Armor</option>
+            <option value="Sci-fi Gear Tactical Vest">Sci-fi Gear Tactical Vest</option>
+            <option value="Sci-fi Gear Sleek Bomber Jacket">Sci-fi Gear Sleek Bomber Jacket</option>
+            <option value="Sci-fi Gear Cyberpunk Trench Coat">Sci-fi Gear Cyberpunk Trench Coat</option>
+        </select>
+        <input type="text" id="topAttireInput" placeholder="Add your own top attire...">
+        <button onclick="addTopAttireOption()">Add Top Attire</button>
+
+        <div class="section-headline">Top Attire Color:</div>
+        <select id="topAttireColor">
+            <option value="">Select Top Attire Color</option>
+            <option value="Color Solid">Color Solid</option>
+            <option value="Color Black">Color Black</option>
+            <option value="Color White">Color White</option>
+            <option value="Color Blue">Color Blue</option>
+            <option value="Color Red">Color Red</option>
+            <option value="Color Green">Color Green</option>
+            <option value="Color Brown">Color Brown</option>
+            <option value="Color Gray">Color Gray</option>
+            <option value="Color Navy">Color Navy</option>
+            <option value="Color Beige">Color Beige</option>
+            <option value="Color Pink">Color Pink</option>
+            <option value="Color Yellow">Color Yellow</option>
+            <option value="Color Orange">Color Orange</option>
+            <option value="Color Purple">Color Purple</option>
+            <option value="Color Teal">Color Teal</option>
+        </select>
+        <input type="text" id="topAttireColorInput" placeholder="Add your own top attire color...">
+        <button onclick="addTopAttireColorOption()">Add Top Attire Color</button>
+
+        <div class="section-headline">Top Attire Pattern:</div>
+        <select id="topAttirePattern">
+            <option value="">Select Top Attire Pattern</option>
+            <option value="Pattern Stripes">Pattern Stripes</option>
+            <option value="Pattern Plaid">Pattern Plaid</option>
+            <option value="Pattern Floral">Pattern Floral</option>
+            <option value="Pattern Camouflage">Pattern Camouflage</option>
+            <option value="Pattern Neon">Pattern Neon</option>
+            <option value="Pattern Metallic">Pattern Metallic</option>
+            <option value="Pattern Two-Tone Designs">Pattern Two-Tone Designs</option>
+        </select>
+        <input type="text" id="topAttirePatternInput" placeholder="Add your own top attire pattern...">
+        <button onclick="addTopAttirePatternOption()">Add Top Attire Pattern</button>
+
+        <div class="section-headline">Bottom Attire:</div>
+        <select id="bottomAttire">
+            <option value="">Select Bottom Attire</option>
+            <option value="Casual Wear Jeans">Casual Wear Jeans</option>
+            <option value="Casual Wear Cargo Pants">Casual Wear Cargo Pants</option>
+            <option value="Casual Wear Joggers">Casual Wear Joggers</option>
+            <option value="Casual Wear Shorts">Casual Wear Shorts</option>
+            <option value="Casual Wear Slim-fit Pants">Casual Wear Slim-fit Pants</option>
+            <option value="Casual Wear Khakis">Casual Wear Khakis</option>
+            <option value="Formal Wear Dress Pants">Formal Wear Dress Pants</option>
+            <option value="Formal Wear Chinos">Formal Wear Chinos</option>
+            <option value="Formal Wear Trousers">Formal Wear Trousers</option>
+            <option value="Formal Wear Slacks">Formal Wear Slacks</option>
+            <option value="Fantasy Gear Leather Pants">Fantasy Gear Leather Pants</option>
+            <option value="Fantasy Gear Battle Leggings">Fantasy Gear Battle Leggings</option>
+            <option value="Fantasy Gear Chainmail Bottoms">Fantasy Gear Chainmail Bottoms</option>
+            <option value="Fantasy Gear Utility Trousers">Fantasy Gear Utility Trousers</option>
+            <option value="Fantasy Gear Armor-Plated Pants">Fantasy Gear Armor-Plated Pants</option>
+            <option value="Futuristic Gear High-tech Leggings">Futuristic Gear High-tech Leggings</option>
+            <option value="Futuristic Gear Mechanized Suit Pants">Futuristic Gear Mechanized Suit Pants</option>
+            <option value="Futuristic Gear Sleek Space Suit Bottoms">Futuristic Gear Sleek Space Suit Bottoms</option>
+            <option value="Futuristic Gear Holographic Pants">Futuristic Gear Holographic Pants</option>
+            <option value="Sportswear Running Shorts">Sportswear Running Shorts</option>
+            <option value="Sportswear Track Pants">Sportswear Track Pants</option>
+            <option value="Sportswear Compression Pants">Sportswear Compression Pants</option>
+            <option value="Sportswear Gym Shorts">Sportswear Gym Shorts</option>
+        </select>
+        <input type="text" id="bottomAttireInput" placeholder="Add your own bottom attire...">
+        <button onclick="addBottomAttireOption()">Add Bottom Attire</button>
+
+        <div class="section-headline">Bottom Attire Color:</div>
+        <select id="bottomAttireColor">
+            <option value="">Select Bottom Attire Color</option>
+            <option value="Color Solid">Color Solid</option>
+            <option value="Color Black">Color Black</option>
+            <option value="Color White">Color White</option>
+            <option value="Color Blue">Color Blue</option>
+            <option value="Color Red">Color Red</option>
+            <option value="Color Green">Color Green</option>
+            <option value="Color Brown">Color Brown</option>
+            <option value="Color Gray">Color Gray</option>
+            <option value="Color Navy">Color Navy</option>
+            <option value="Color Beige">Color Beige</option>
+            <option value="Color Pink">Color Pink</option>
+            <option value="Color Yellow">Color Yellow</option>
+            <option value="Color Orange">Color Orange</option>
+            <option value="Color Purple">Color Purple</option>
+            <option value="Color Teal">Color Teal</option>
+        </select>
+        <input type="text" id="bottomAttireColorInput" placeholder="Add your own bottom attire color...">
+        <button onclick="addBottomAttireColorOption()">Add Bottom Attire Color</button>
+
+        <div class="section-headline">Bottom Attire Pattern:</div>
+        <select id="bottomAttirePattern">
+            <option value="">Select Bottom Attire Pattern</option>
+            <option value="Pattern Bold Stripes">Pattern Bold Stripes</option>
+            <option value="Pattern Camouflage">Pattern Camouflage</option>
+            <option value="Pattern Checkerboard">Pattern Checkerboard</option>
+            <option value="Pattern Neon Designs">Pattern Neon Designs</option>
+            <option value="Pattern Reflective Accents">Pattern Reflective Accents</option>
+        </select>
+        <input type="text" id="bottomAttirePatternInput" placeholder="Add your own bottom attire pattern...">
+        <button onclick="addBottomAttirePatternOption()">Add Bottom Attire Pattern</button>
+
+        <div class="section-headline">Footwear:</div>
+        <select id="footwear">
+            <option value="">Select Footwear</option>
+            <option value="Casual Footwear Sneakers">Casual Footwear Sneakers</option>
+            <option value="Casual Footwear Trainers">Casual Footwear Trainers</option>
+            <option value="Casual Footwear Slip-ons">Casual Footwear Slip-ons</option>
+            <option value="Casual Footwear Loafers">Casual Footwear Loafers</option>
+            <option value="Casual Footwear Sandals">Casual Footwear Sandals</option>
+            <option value="Fantasy Footwear Leather Boots">Fantasy Footwear Leather Boots</option>
+            <option value="Fantasy Footwear Combat Boots">Fantasy Footwear Combat Boots</option>
+            <option value="Fantasy Footwear Hiking Shoes">Fantasy Footwear Hiking Shoes</option>
+            <option value="Fantasy Footwear Steampunk Boots">Fantasy Footwear Steampunk Boots</option>
+            <option value="Fantasy Footwear Riding Boots">Fantasy Footwear Riding Boots</option>
+            <option value="Sci-fi Footwear Futuristic High-tops">Sci-fi Footwear Futuristic High-tops</option>
+            <option value="Sci-fi Footwear Space Boots">Sci-fi Footwear Space Boots</option>
+            <option value="Sci-fi Footwear Cybernetic Footwear">Sci-fi Footwear Cybernetic Footwear</option>
+            <option value="Sci-fi Footwear Hover Boots">Sci-fi Footwear Hover Boots</option>
+            <option value="Formal Footwear Dress Shoes">Formal Footwear Dress Shoes</option>
+            <option value="Formal Footwear Oxfords">Formal Footwear Oxfords</option>
+            <option value="Formal Footwear Derby Shoes">Formal Footwear Derby Shoes</option>
+            <option value="Formal Footwear Monk Straps">Formal Footwear Monk Straps</option>
+            <option value="Sports Footwear Running Shoes">Sports Footwear Running Shoes</option>
+            <option value="Sports Footwear Cleats">Sports Footwear Cleats</option>
+            <option value="Sports Footwear Cross-trainers">Sports Footwear Cross-trainers</option>
+            <option value="Sports Footwear Basketball Shoes">Sports Footwear Basketball Shoes</option>
+            <option value="Unique Footwear Platform Shoes">Unique Footwear Platform Shoes</option>
+            <option value="Unique Footwear Spiked Boots">Unique Footwear Spiked Boots</option>
+            <option value="Unique Footwear Metallic Shoes">Unique Footwear Metallic Shoes</option>
+            <option value="Unique Footwear High-tech Boots with Glowing Features">Unique Footwear High-tech Boots with Glowing Features</option>
+        </select>
+        <input type="text" id="footwearInput" placeholder="Add your own footwear...">
+        <button onclick="addFootwearOption()">Add Footwear</button>
+
+        <div class="section-headline">Footwear Color:</div>
+        <select id="footwearColor">
+            <option value="">Select Footwear Color</option>
+            <option value="Footwear Color White">Footwear Color White</option>
+            <option value="Footwear Color Black">Footwear Color Black</option>
+            <option value="Footwear Color Brown">Footwear Color Brown</option>
+            <option value="Footwear Color Red">Footwear Color Red</option>
+            <option value="Footwear Color Neon">Footwear Color Neon</option>
+            <option value="Footwear Color Metallic">Footwear Color Metallic</option>
+            <option value="Footwear Color Camouflage">Footwear Color Camouflage</option>
+            <option value="Footwear Color Multi-colored Designs">Footwear Color Multi-colored Designs</option>
+        </select>
+        <input type="text" id="footwearColorInput" placeholder="Add your own footwear color...">
+        <button onclick="addFootwearColorOption()">Add Footwear Color</button>
+    </div>
+
+    <button id="summary" onclick="generateSummary()">Generate Character Summary</button>
+    <button id="oneLine" onclick="generateOneLinePrompt()">Generate One-Line Prompt</button>
+    <button  id="Random"  onclick="chooseRandom()">Choose Random</button>
+    <button id="copyButton" onclick="copyText()">Copy to Clipboard</button>
+    <div id="characterSummary" contenteditable="true"></div>
+     <script>
+function addNameOption() {
+    const nameInput = document.getElementById('nameInput').value;
+    const nameSelect = document.getElementById('name');
+    const newOption = document.createElement('option');
+    newOption.value = nameInput;
+    newOption.text = nameInput;
+    nameSelect.add(newOption);
+    document.getElementById('nameInput').value = ''; // Clear the input field
+}
+
+function addAgeOption() {
+    const ageInput = document.getElementById('ageInput').value;
+    const ageSelect = document.getElementById('age');
+    const newOption = document.createElement('option');
+    newOption.value = ageInput;
+    newOption.text = ageInput;
+    ageSelect.add(newOption);
+    document.getElementById('ageInput').value = ''; // Clear the input field
+}
+
+function addGenderOption() {
+    const genderInput = document.getElementById('genderInput').value;
+    const genderSelect = document.getElementById('gender');
+    const newOption = document.createElement('option');
+    newOption.value = genderInput;
+    newOption.text = genderInput;
+    genderSelect.add(newOption);
+    document.getElementById('genderInput').value = ''; // Clear the input field
+}
+
+function addHairColorOption() {
+    const hairColorInput = document.getElementById('hairColorInput').value;
+    const hairColorSelect = document.getElementById('hairColor');
+    const newOption = document.createElement('option');
+    newOption.value = hairColorInput;
+    newOption.text = hairColorInput;
+    hairColorSelect.add(newOption);
+    document.getElementById('hairColorInput').value = ''; // Clear the input field
+}
+
+function addHairStyleOption() {
+    const hairStyleInput = document.getElementById('hairStyleInput').value;
+    const hairStyleSelect = document.getElementById('hairStyle');
+    const newOption = document.createElement('option');
+    newOption.value = hairStyleInput;
+    newOption.text = hairStyleInput;
+    hairStyleSelect.add(newOption);
+    document.getElementById('hairStyleInput').value = ''; // Clear the input field
+}
+
+function addEyeColorOption() {
+    const eyeColorInput = document.getElementById('eyeColorInput').value;
+    const eyeColorSelect = document.getElementById('eyeColor');
+    const newOption = document.createElement('option');
+    newOption.value = eyeColorInput;
+    newOption.text = eyeColorInput;
+    eyeColorSelect.add(newOption);
+    document.getElementById('eyeColorInput').value = ''; // Clear the input field
+}
+
+function addFaceShapeOption() {
+    const faceShapeInput = document.getElementById('faceShapeInput').value;
+    const faceShapeSelect = document.getElementById('faceShape');
+    const newOption = document.createElement('option');
+    newOption.value = faceShapeInput;
+    newOption.text = faceShapeInput;
+    faceShapeSelect.add(newOption);
+    document.getElementById('faceShapeInput').value = ''; // Clear the input field
+}
+
+function addSkinToneOption() {
+    const skinToneInput = document.getElementById('skinToneInput').value;
+    const skinToneSelect = document.getElementById('skinTone');
+    const newOption = document.createElement('option');
+    newOption.value = skinToneInput;
+    newOption.text = skinToneInput;
+    skinToneSelect.add(newOption);
+    document.getElementById('skinToneInput').value = ''; // Clear the input field
+}
+
+function addFacialFeaturesOption() {
+    const facialFeaturesInput = document.getElementById('facialFeaturesInput').value;
+    const facialFeaturesSelect = document.getElementById('facialFeatures');
+    const newOption = document.createElement('option');
+    newOption.value = facialFeaturesInput;
+    newOption.text = facialFeaturesInput;
+    facialFeaturesSelect.add(newOption);
+    document.getElementById('facialFeaturesInput').value = ''; // Clear the input field
+}
+
+function addFacialHairOption() {
+    const facialHairInput = document.getElementById('facialHairInput').value;
+    const facialHairSelect = document.getElementById('facialHair');
+    const newOption = document.createElement('option');
+    newOption.value = facialHairInput;
+    newOption.text = facialHairInput;
+    facialHairSelect.add(newOption);
+    document.getElementById('facialHairInput').value = ''; // Clear the input field
+}
+
+function addFacialMarkingsOption() {
+    const facialMarkingsInput = document.getElementById('facialMarkingsInput').value;
+    const facialMarkingsSelect = document.getElementById('facialMarkings');
+    const newOption = document.createElement('option');
+    newOption.value = facialMarkingsInput;
+    newOption.text = facialMarkingsInput;
+    facialMarkingsSelect.add(newOption);
+    document.getElementById('facialMarkingsInput').value = ''; // Clear the input field
+}
+
+function addCharacterOriginsOption() {
+    const characterOriginsInput = document.getElementById('characterOriginsInput').value;
+    const characterOriginsSelect = document.getElementById('characterOrigins');
+    const newOption = document.createElement('option');
+    newOption.value = characterOriginsInput;
+    newOption.text = characterOriginsInput;
+    characterOriginsSelect.add(newOption);
+    document.getElementById('characterOriginsInput').value = ''; // Clear the input field
+}
+
+function addTopAttireOption() {
+    const topAttireInput = document.getElementById('topAttireInput').value;
+    const topAttireSelect = document.getElementById('topAttire');
+    const newOption = document.createElement('option');
+    newOption.value = topAttireInput;
+    newOption.text = topAttireInput;
+    topAttireSelect.add(newOption);
+    document.getElementById('topAttireInput').value = ''; // Clear the input field
+}
+
+function addTopAttireColorOption() {
+    const topAttireColorInput = document.getElementById('topAttireColorInput').value;
+    const topAttireColorSelect = document.getElementById('topAttireColor');
+    const newOption = document.createElement('option');
+    newOption.value = topAttireColorInput;
+    newOption.text = topAttireColorInput;
+    topAttireColorSelect.add(newOption);
+    document.getElementById('topAttireColorInput').value = ''; // Clear the input field
+}
+
+function addTopAttirePatternOption() {
+    const topAttirePatternInput = document.getElementById('topAttirePatternInput').value;
+    const topAttirePatternSelect = document.getElementById('topAttirePattern');
+    const newOption = document.createElement('option');
+    newOption.value = topAttirePatternInput;
+    newOption.text = topAttirePatternInput;
+    topAttirePatternSelect.add(newOption);
+    document.getElementById('topAttirePatternInput').value = ''; // Clear the input field
+}
+
+function addBottomAttireOption() {
+    const bottomAttireInput = document.getElementById('bottomAttireInput').value;
+    const bottomAttireSelect = document.getElementById('bottomAttire');
+    const newOption = document.createElement('option');
+    newOption.value = bottomAttireInput;
+    newOption.text = bottomAttireInput;
+    bottomAttireSelect.add(newOption);
+    document.getElementById('bottomAttireInput').value = ''; // Clear the input field
+}
+
+function addBottomAttireColorOption() {
+    const bottomAttireColorInput = document.getElementById('bottomAttireColorInput').value;
+    const bottomAttireColorSelect = document.getElementById('bottomAttireColor');
+    const newOption = document.createElement('option');
+    newOption.value = bottomAttireColorInput;
+    newOption.text = bottomAttireColorInput;
+    bottomAttireColorSelect.add(newOption);
+    document.getElementById('bottomAttireColorInput').value = ''; // Clear the input field
+}
+
+function addBottomAttirePatternOption() {
+    const bottomAttirePatternInput = document.getElementById('bottomAttirePatternInput').value;
+    const bottomAttirePatternSelect = document.getElementById('bottomAttirePattern');
+    const newOption = document.createElement('option');
+    newOption.value = bottomAttirePatternInput;
+    newOption.text = bottomAttirePatternInput;
+    bottomAttirePatternSelect.add(newOption);
+    document.getElementById('bottomAttirePatternInput').value = ''; // Clear the input field
+}
+
+function addFootwearOption() {
+    const footwearInput = document.getElementById('footwearInput').value;
+    const footwearSelect = document.getElementById('footwear');
+    const newOption = document.createElement('option');
+    newOption.value = footwearInput;
+    newOption.text = footwearInput;
+    footwearSelect.add(newOption);
+    document.getElementById('footwearInput').value = ''; // Clear the input field
+}
+
+function addFootwearColorOption() {
+    const footwearColorInput = document.getElementById('footwearColorInput').value;
+    const footwearColorSelect = document.getElementById('footwearColor');
+    const newOption = document.createElement('option');
+    newOption.value = footwearColorInput;
+    newOption.text = footwearColorInput;
+    footwearColorSelect.add(newOption);
+    document.getElementById('footwearColorInput').value = ''; // Clear the input field
+}
+
+
+function generateSummary() {
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const gender = document.getElementById('gender').value;
+    const hairStyle = document.getElementById('hairStyle').value;
+    const hairColor = document.getElementById('hairColor').value;
+    const faceShape = document.getElementById('faceShape').value;
+    const skinTone = document.getElementById('skinTone').value;
+    const facialFeatures = document.getElementById('facialFeatures').value;
+    const facialHair = document.getElementById('facialHair').value;
+    const facialMarkings = document.getElementById('facialMarkings').value;
+    const characterOrigins = document.getElementById('characterOrigins').value;
+    const topAttire = document.getElementById('topAttire').value;
+    const topAttireColor = document.getElementById('topAttireColor').value;
+    const topAttirePattern = document.getElementById('topAttirePattern').value;
+    const bottomAttire = document.getElementById('bottomAttire').value;
+    const bottomAttireColor = document.getElementById('bottomAttireColor').value;
+    const bottomAttirePattern = document.getElementById('bottomAttirePattern').value;
+    const footwear = document.getElementById('footwear').value;
+    const footwearColor = document.getElementById('footwearColor').value;
+
+    const summary = `
+        <h2>Character Summary</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Age:</strong> ${age}</p>
+        <p><strong>Gender:</strong> ${gender}</p>
+        <p><strong>Hair Style:</strong> ${hairStyle}</p>
+        <p><strong>Hair Color:</strong> ${hairColor}</p>
+        <p><strong>Face Shape:</strong> ${faceShape}</p>
+        <p><strong>Skin Tone:</strong> ${skinTone}</p>
+        <p><strong>Facial Features:</strong> ${facialFeatures}</p>
+        <p><strong>Facial Hair:</strong> ${facialHair}</p>
+        <p><strong>Facial Markings:</strong> ${facialMarkings}</p>
+        <p><strong>Character Origins:</strong> ${characterOrigins}</p>
+        <p><strong>Top Attire:</strong> ${topAttire}</p>
+        <p><strong>Top Attire Color:</strong> ${topAttireColor}</p>
+        <p><strong>Top Attire Pattern:</strong> ${topAttirePattern}</p>
+        <p><strong>Bottom Attire:</strong> ${bottomAttire}</p>
+        <p><strong>Bottom Attire Color:</strong> ${bottomAttireColor}</p>
+        <p><strong>Bottom Attire Pattern:</strong> ${bottomAttirePattern}</p>
+        <p><strong>Footwear:</strong> ${footwear}</p>
+        <p><strong>Footwear Color:</strong> ${footwearColor}</p>
+    `;
+
+    document.getElementById('characterSummary').innerHTML = summary;
+}
+
+function generateOneLinePrompt() {
+    let prompt = "";
+
+    // Name (without "Name:")
+    if (document.getElementById('name').value) {
+        prompt += `${document.getElementById('name').value}, `;
+    }
+
+    // Age (as a number plus " years old")
+    if (document.getElementById('age').value) {
+        const ageValue = parseInt(document.getElementById('age').value); // Try to parse as number
+        if (!isNaN(ageValue)) { // Check if it's a valid number
+            prompt += `${ageValue} years old, `;
+        } else {
+            prompt += `${document.getElementById('age').value}, `; // If not a number, use the original text
+        }
+    }
+
+    // Hair Properties
+    if (document.getElementById('hairStyle').value) {
+        prompt += `${document.getElementById('hairStyle').value}, `;
+    }
+    if (document.getElementById('hairColor').value) {
+        prompt += `${document.getElementById('hairColor').value}, `;
+    }
+
+    // Face Description
+    if (document.getElementById('faceShape').value) {
+        prompt += `${document.getElementById('faceShape').value}, `;
+    }
+    if (document.getElementById('skinTone').value) {
+        prompt += `${document.getElementById('skinTone').value}, `;
+    }
+
+    // Facial Features
+    if (document.getElementById('facialFeatures').value) {
+        prompt += `${document.getElementById('facialFeatures').value}, `;
+    }
+    if (document.getElementById('facialHair').value) {
+        prompt += `${document.getElementById('facialHair').value}, `;
+    }
+    if (document.getElementById('facialMarkings').value) {
+        prompt += `${document.getElementById('facialMarkings').value}, `;
+    }
+    if (document.getElementById('characterOrigins').value) {
+        prompt += `${document.getElementById('characterOrigins').value}, `;
+    }
+
+    // Clothing Properties
+    if (document.getElementById('topAttire').value) {
+        prompt += `${document.getElementById('topAttire').value}, `;
+    }
+    if (document.getElementById('topAttireColor').value) {
+        prompt += `${document.getElementById('topAttireColor').value}, `;
+    }
+    if (document.getElementById('topAttirePattern').value) {
+        prompt += `${document.getElementById('topAttirePattern').value}, `;
+    }
+    if (document.getElementById('bottomAttire').value) {
+        prompt += `${document.getElementById('bottomAttire').value}, `;
+    }
+    if (document.getElementById('bottomAttireColor').value) {
+        prompt += `${document.getElementById('bottomAttireColor').value}, `;
+    }
+    if (document.getElementById('bottomAttirePattern').value) {
+        prompt += `${document.getElementById('bottomAttirePattern').value}, `;
+    }
+    if (document.getElementById('footwear').value) {
+        prompt += `${document.getElementById('footwear').value}, `;
+    }
+    if (document.getElementById('footwearColor').value) {
+        prompt += `${document.getElementById('footwearColor').value}, `;
+    }
+
+    // Remove the trailing comma and space if any
+    if (prompt.endsWith(", ")) {
+        prompt = prompt.slice(0, -2); 
+    }
+
+    document.getElementById('characterSummary').innerHTML = `<h3>One-Line Prompt</h3><p>${prompt}</p>`;
+}
+
+function chooseRandom() {
+    function getRandomIndex(selectElement) {
+        return Math.floor(Math.random() * selectElement.options.length);
+    }
+
+    const nameSelect = document.getElementById('name');
+    nameSelect.selectedIndex = getRandomIndex(nameSelect);
+
+    const ageSelect = document.getElementById('age');
+    ageSelect.selectedIndex = getRandomIndex(ageSelect);
+
+    const genderSelect = document.getElementById('gender');
+    genderSelect.selectedIndex = getRandomIndex(genderSelect);
+
+    const hairStyleSelect = document.getElementById('hairStyle');
+    hairStyleSelect.selectedIndex = getRandomIndex(hairStyleSelect);
+
+    const hairColorSelect = document.getElementById('hairColor');
+    hairColorSelect.selectedIndex = getRandomIndex(hairColorSelect);
+
+    const faceShapeSelect = document.getElementById('faceShape');
+    faceShapeSelect.selectedIndex = getRandomIndex(faceShapeSelect);
+
+    const skinToneSelect = document.getElementById('skinTone');
+    skinToneSelect.selectedIndex = getRandomIndex(skinToneSelect);
+
+    const facialFeaturesSelect = document.getElementById('facialFeatures');
+    facialFeaturesSelect.selectedIndex = getRandomIndex(facialFeaturesSelect);
+
+    const facialHairSelect = document.getElementById('facialHair');
+    facialHairSelect.selectedIndex = getRandomIndex(facialHairSelect);
+
+    const facialMarkingsSelect = document.getElementById('facialMarkings');
+    facialMarkingsSelect.selectedIndex = getRandomIndex(facialMarkingsSelect);
+
+    const characterOriginsSelect = document.getElementById('characterOrigins');
+    characterOriginsSelect.selectedIndex = getRandomIndex(characterOriginsSelect);
+
+    const topAttireSelect = document.getElementById('topAttire');
+    topAttireSelect.selectedIndex = getRandomIndex(topAttireSelect);
+
+    const topAttireColorSelect = document.getElementById('topAttireColor');
+    topAttireColorSelect.selectedIndex = getRandomIndex(topAttireColorSelect);
+
+    const topAttirePatternSelect = document.getElementById('topAttirePattern');
+    topAttirePatternSelect.selectedIndex = getRandomIndex(topAttirePatternSelect);
+
+    const bottomAttireSelect = document.getElementById('bottomAttire');
+    bottomAttireSelect.selectedIndex = getRandomIndex(bottomAttireSelect);
+
+    const bottomAttireColorSelect = document.getElementById('bottomAttireColor');
+    bottomAttireColorSelect.selectedIndex = getRandomIndex(bottomAttireColorSelect);
+
+    const bottomAttirePatternSelect = document.getElementById('bottomAttirePattern');
+    bottomAttirePatternSelect.selectedIndex = getRandomIndex(bottomAttirePatternSelect);
+
+    const footwearSelect = document.getElementById('footwear');
+    footwearSelect.selectedIndex = getRandomIndex(footwearSelect);
+
+    const footwearColorSelect = document.getElementById('footwearColor');
+    footwearColorSelect.selectedIndex = getRandomIndex(footwearColorSelect);
+
+    generateSummary();
+}
+
+function copyText() {
+  const summaryText = document.getElementById('characterSummary');
+  const range = document.createRange();
+
+  // Find the first h3 element (which contains "One-Line Prompt")
+  const oneLinePrompt = summaryText.querySelector('h3'); 
+
+  // If "One-Line Prompt" exists, select the content after it
+  if (oneLinePrompt) {
+    range.setStartAfter(oneLinePrompt); // Start selection after the h3
+    range.setEndAfter(summaryText); // End selection at the end of the summary div
+  } else {
+    // If h3 doesn't exist (no one-line prompt), select all content
+    range.selectNodeContents(summaryText); 
+  }
+
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  navigator.clipboard.writeText(selection.toString()) // Copy selected text
+    .then(() => {
+      document.getElementById('copyButton').classList.add('checked');
+      setTimeout(() => {
+        document.getElementById('copyButton').classList.remove('checked'); 
+      }, 1000);
+    })
+    .catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+}
+
+// Create a "Done Editing" button (optional)
+const doneEditingButton = document.createElement('button');
+doneEditingButton.textContent = 'Done Editing';
+doneEditingButton.id = 'doneEditingButton';
+doneEditingButton.style.marginTop = '10px';
+document.body.appendChild(doneEditingButton);
+
+// Handle the "Done Editing" button click
+doneEditingButton.addEventListener('click', () => {
+  // Reset the contenteditable attribute to false
+  document.getElementById('characterSummary').setAttribute('contenteditable', false); 
+  // Hide the "Done Editing" button (optional)
+  doneEditingButton.style.display = 'none';
+}); 
+
+// ... (Other JavaScript functions) ... 
+
+function copyText() {
+  const summaryText = document.getElementById('characterSummary');
+  const range = document.createRange();
+
+  // Find the first h3 element 
+  const oneLinePrompt = summaryText.querySelector('h3'); 
+
+  // If "One-Line Prompt" exists, select the content after it
+  if (oneLinePrompt) {
+    range.setStartAfter(oneLinePrompt); 
+    range.setEndAfter(summaryText); 
+  } else {
+    // If h3 doesn't exist, select all content
+    range.selectNodeContents(summaryText); 
+  }
+
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range); // Select the text
+
+  // Copy the selected text
+  navigator.clipboard.writeText(selection.toString()) 
+    .then(() => {
+      document.getElementById('copyButton').classList.add('checked');
+      setTimeout(() => {
+        document.getElementById('copyButton').classList.remove('checked'); 
+      }, 1000);
+    })
+    .catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+}
+</script>
+</body>
+</html>
